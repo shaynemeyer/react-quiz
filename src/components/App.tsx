@@ -1,12 +1,15 @@
 import { useState } from 'react';
-import DateCounter from './DateCounter';
+import Header from './Header';
+import Main from './Main';
 
 function App() {
-  const [count, setCount] = useState(0);
-
   return (
-    <div>
-      <DateCounter />
+    <div className="app">
+      <Header />
+      <Main>
+        <p>1/15</p>
+        <p>Question?</p>
+      </Main>
     </div>
   );
 }
