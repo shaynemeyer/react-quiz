@@ -2,12 +2,14 @@ interface FinishedScreenProps {
   points: number;
   maxPossiblePoints: number;
   highscore: number;
+  dispatch: React.Dispatch<AppAction>;
 }
 
 export default function FinishedScreen({
   points,
   maxPossiblePoints,
   highscore,
+  dispatch,
 }: FinishedScreenProps) {
   const percentage = (points / maxPossiblePoints) * 100;
 
