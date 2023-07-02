@@ -10,6 +10,13 @@ interface QuizContextProps {
   numQuestions: number;
   maxPossiblePoints: number;
   highscore?: number;
+  secondsRemaining?: number;
+  restart: () => void;
+  nextQuestion: () => void;
+  finish: () => void;
+  tick: () => void;
+  start: () => void;
+  selectOption: (index: string) => void;
 }
 
 const QuizContext = createContext<QuizContextProps>({ 
@@ -17,9 +24,16 @@ const QuizContext = createContext<QuizContextProps>({
   status: "loading",
   points: 0,
   index: 0,
-  answer: '',
+  answer: undefined,
   numQuestions: 0,
-  maxPossiblePoints: 0
+  maxPossiblePoints: 0,
+  secondsRemaining: 0,
+  restart: () => undefined,
+  nextQuestion: () => undefined,
+  finish: () => undefined,
+  tick: () => undefined,
+  start: () => undefined,
+  selectOption: () => undefined,
 });
 
 const SECS_PER_QUESTION = 30;
@@ -29,10 +43,10 @@ interface QuizState {
   points: number;
   status: string;
   index: number;
-  answer: string;
+  answer?: string | undefined;
   highscore: number
-  numQuestions: number | null;
-  secondsRemaining: number | null;
+  numQuestions?: number | null;
+  secondsRemaining?: number | undefined;
 }
 
 const initialState = {
@@ -41,11 +55,11 @@ const initialState = {
   // 'loading', 'error', 'ready', 'active', 'finished'
   status: "loading",
   index: 0,
-  answer: '',
+  answer: undefined,
   points: 0,
   highscore: 0,
   numQuestions: 0,
-  secondsRemaining: null,
+  secondsRemaining: 0,
 } as QuizState;
 
 type DataReceived = {
@@ -93,7 +107,7 @@ function reducer(state: QuizState, action: QuizActions) {
             : state.points,
       };
     case "nextQuestion":
-      return { ...state, index: state.index + 1, answer: '' };
+      return { ...state, index: state.index + 1, answer: undefined };
     case "finish":
       return {
         ...state,
@@ -107,7 +121,7 @@ function reducer(state: QuizState, action: QuizActions) {
     case "tick":
       return {
         ...state,
-        secondsRemaining: state.secondsRemaining ? state.secondsRemaining - 1 : null,
+        secondsRemaining: state.secondsRemaining ? state.secondsRemaining - 1 : undefined,
         status: state.secondsRemaining === 0 ? "finished" : state.status,
       };
 
@@ -119,7 +133,7 @@ function reducer(state: QuizState, action: QuizActions) {
 function QuizProvider({ children }: { children: React.ReactNode }) {
   const [
     { questions, status, index, answer, points, highscore, secondsRemaining },
-    dispatch,
+    dispatch
   ] = useReducer(reducer, initialState);
 
   const numQuestions = questions.length;
@@ -131,7 +145,7 @@ function QuizProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     async function fetchQuestions() {
       try {
-        const results = await fetch("http://localhost:9000/questions");
+        const results = await fetch("http://localhost:8000/questions");
         const data = await results.json() ;
         if (data) {
           dispatch({ type: "dataReceived", payload: data })
@@ -143,6 +157,30 @@ function QuizProvider({ children }: { children: React.ReactNode }) {
     fetchQuestions();
   }, []);
 
+  function restart() {
+    dispatch({ type: 'restart' });
+  }
+
+  function nextQuestion() {
+    dispatch({ type: 'nextQuestion' });
+  }
+
+  function finish() {
+    dispatch({ type: 'finish' });
+  }
+
+  function tick() {
+    dispatch({ type: 'tick' });
+  }
+
+  function start() {
+    dispatch({ type: 'start' });
+  }
+
+  function selectOption(index: string) {
+    dispatch({ type: 'newAnswer', payload: index })
+  }
+  
   return (
     <QuizContext.Provider
       value={{
@@ -154,6 +192,13 @@ function QuizProvider({ children }: { children: React.ReactNode }) {
         maxPossiblePoints,
         answer,
         highscore,
+        secondsRemaining,
+        restart,
+        nextQuestion,
+        finish,
+        tick,
+        start,
+        selectOption
       }}
     >
       {children}

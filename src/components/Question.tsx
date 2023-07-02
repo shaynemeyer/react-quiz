@@ -1,9 +1,5 @@
 import { useQuiz } from '../context/QuizContext';
-import { SingleQuestion } from '../types/Questions';
-import { AppAction } from './App';
 import Options from './Options';
-
-
 
 export default function Question() {
   const { questions, index } = useQuiz();

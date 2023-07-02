@@ -1,7 +1,7 @@
 import { useQuiz } from '../context/QuizContext';
 
 export default function NextButton() {
-  const { dispatch, answer, index, numQuestions } = useQuiz();
+  const { nextQuestion, finish, answer, index, numQuestions } = useQuiz();
 
   if (answer === null) return null;
 
@@ -9,7 +9,7 @@ export default function NextButton() {
     return (
       <button
         className="btn btn-ui"
-        onClick={() => dispatch({ type: 'nextQuestion' })}
+        onClick={() => nextQuestion()}
       >
         Next
       </button>
@@ -20,7 +20,7 @@ export default function NextButton() {
     return (
       <button
         className="btn btn-ui"
-        onClick={() => dispatch({ type: 'finish' })}
+        onClick={() => finish()}
       >
         Finish
       </button>

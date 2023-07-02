@@ -5,9 +5,9 @@ interface OptionsProps {
 }
 
 export default function Options({ question }: OptionsProps) {
-  const { dispatch, answer } = useQuiz();
+  const { selectOption, answer } = useQuiz();
 
-  const hasAnswered = answer !== null;
+  const hasAnswered = answer !== undefined;
 
   return (
     <div className="options">
@@ -22,7 +22,7 @@ export default function Options({ question }: OptionsProps) {
           }`}
           disabled={hasAnswered}
           key={option}
-          onClick={() => dispatch({ type: 'newAnswer', payload: index })}
+          onClick={() => selectOption(`${index}`)}
         >
           {option}
         </button>
