@@ -1,20 +1,19 @@
+import { useQuiz } from '../context/QuizContext';
 import { SingleQuestion } from '../types/Questions';
-import { AppAction } from './App';
-
 interface OptionsProps {
   question: SingleQuestion;
-  dispatch: React.Dispatch<AppAction>;
-  answer: number | null;
 }
 
-export default function Options({ question, dispatch, answer }: OptionsProps) {
+export default function Options({ question }: OptionsProps) {
+  const { dispatch, answer } = useQuiz();
+
   const hasAnswered = answer !== null;
 
   return (
     <div className="options">
       {question.options.map((option, index) => (
         <button
-          className={`btn btn-option ${index === answer ? 'answer' : ''} ${
+          className={`btn btn-option ${index === Number(answer) ? 'answer' : ''} ${
             hasAnswered
               ? index === question.correctOption
                 ? 'correct'

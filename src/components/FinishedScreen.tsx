@@ -1,17 +1,9 @@
-interface FinishedScreenProps {
-  points: number;
-  maxPossiblePoints: number;
-  highscore: number;
-  dispatch: React.Dispatch<AppAction>;
-}
+import { useQuiz } from "../context/QuizContext";
 
-export default function FinishedScreen({
-  points,
-  maxPossiblePoints,
-  highscore,
-  dispatch,
-}: FinishedScreenProps) {
-  const percentage = (points / maxPossiblePoints) * 100;
+export default function FinishedScreen() {
+  const { points, maxPossiblePoints, highscore, dispatch } = useQuiz();
+
+  const percentage = maxPossiblePoints ? (points / maxPossiblePoints) * 100 : 0;
 
   let emoji = '🤦';
 

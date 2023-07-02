@@ -1,14 +1,11 @@
 import { useEffect } from 'react';
-import { AppAction } from './App';
+import { useQuiz } from '../context/QuizContext';
 
-interface TimerProps {
-  dispatch: React.Dispatch<AppAction>;
-  secondsRemaining: number;
-}
+export default function Timer() {
+  const { dispatch, secondsRemaining } = useQuiz();
 
-export default function Timer({ dispatch, secondsRemaining }: TimerProps) {
-  const minutes = Math.floor(secondsRemaining / 60);
-  const seconds = secondsRemaining % 60;
+  const minutes = secondsRemaining ? Math.floor(Number(secondsRemaining) / 60) : 0;
+  const seconds = secondsRemaining ? secondsRemaining % 60 : 0;
 
   useEffect(() => {
     const id = setInterval(() => {

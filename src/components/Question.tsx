@@ -1,23 +1,19 @@
+import { useQuiz } from '../context/QuizContext';
 import { SingleQuestion } from '../types/Questions';
 import { AppAction } from './App';
 import Options from './Options';
 
-interface QuestionProps {
-  question: SingleQuestion;
-  dispatch: React.Dispatch<AppAction>;
-  answer: number | null;
-}
 
-export default function Question({
-  question,
-  dispatch,
-  answer,
-}: QuestionProps) {
+
+export default function Question() {
+  const { questions, index } = useQuiz();
+  const question = questions[index];
+
   return (
     <div>
       <h4>{question.question}</h4>
 
-      <Options question={question} dispatch={dispatch} answer={answer} />
+      <Options question={question} />
     </div>
   );
 }
